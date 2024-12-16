@@ -1,50 +1,30 @@
 const sendEmail = require('../utils/emailService');
-const stripe = require('../config/stripe');
-const Plan = require('../models/plan');
+// const stripe = require('../config/stripe');
+const Plan = require('../models/Plan');
 const dotenv = require('dotenv');
 dotenv.config();
 
 const createCheckoutSession = async (req, res) => {
-    const { planId, userCount, email } = req.body;
-
+    const { planId, email, userId } = req.body;
+    const stripe = require('stripe')("sk_test_51QVYpNBC3RCnFZvoPUF7Fwwa6pvf3UvosIOJNKXMCOK3RKcD1RQRy08WCZ7sF1m5yzQgeFxTORtsgXne3OckQp1200TGea5g69");
     try {
         const plan = await Plan.findById(planId);
+        console.log({"id":plan.stripePriceId, "plan": plan.userLimit});
         if (!plan) return res.status(404).json({ message: 'Plan not found' });
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
                 {
-                    price_data: {
-                        currency: 'inr',
-                        product_data: {
-                            name: plan.name,
-                            description: plan.description,
-                        },
-                        unit_amount: plan.price * 100 * userCount, // Amount in paise
-                    },
-                    quantity: 1,
+                    price: plan.stripePriceId, // Use existing Stripe price ID
+                    quantity: plan.userLimit, // Set quantity to userCount
                 },
             ],
-            mode: 'payment',
-            success_url: `${process.env.FRONTEND_URL}/payment-success`,
-            cancel_url: `${process.env.FRONTEND_URL}/payment-cancel`,
+            mode: 'subscription', // Change mode to 'subscription'
+            success_url: `${process.env.FRONTEND_URL}/payment/success?planId=${planId}&userId=${userId}`,
+            cancel_url: `${process.env.FRONTEND_URL}/payment/failure`,
+            customer_email: email, // Set customer email
         });
-
-        // Send payment confirmation email
-        const htmlContent = `
-            <h1>Payment Successful</h1>
-            <p>Dear Customer,</p>
-            <p>Thank you for purchasing the ${plan.name} plan.</p>
-            <p>Details:</p>
-            <ul>
-                <li>Plan: ${plan.name}</li>
-                <li>Price: INR ${plan.price} per user</li>
-                <li>User Count: ${userCount}</li>
-            </ul>
-            <p>We appreciate your business!</p>
-        `;
-        await sendEmail(email, 'Payment Confirmation', htmlContent);
 
         res.json({ url: session.url });
     } catch (err) {

@@ -5,6 +5,6 @@ const router = express.Router();
 const dotenv = require('dotenv');
 dotenv.config();
 
-router.post('/checkout', authenticate, createCheckoutSession);
+router.post('/', createCheckoutSession);
 
 module.exports = router;

@@ -4,18 +4,43 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
   role: {
     type: String,
     enum: ["Admin", "User"],
     default: "User",
   },
-  plan:{type:[mongoose.Schema.Types.ObjectId], required: true},
-  otherUsers:{type:[mongoose.Schema.Types.ObjectId], default:[]},
-  remainingDays:{type: Number, default: 14}
-//   organization: { type: mongoose.Schema.Types.ObjectId, ref: "Organization" },
+  plan: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+  otherUsers: {
+    type: [mongoose.Schema.Types.ObjectId],
+    // default: [],
+  },
+  valid: {
+    type: Date,
+    // default: new Date() + 14 * 24 * 60 * 60 * 1000,
+  },
+  subscriptionAdmin:{
+    type: Boolean,
+    default: true,
+  },
+  referenceUserId:{
+    type: mongoose.Schema.Types.ObjectId,
+  }
+  //   organization: { type: mongoose.Schema.Types.ObjectId, ref: "Organization" },
 });
 
 UserSchema.pre("save", async function (next) {
