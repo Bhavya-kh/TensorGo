@@ -21,7 +21,7 @@ function LoginPage() {
       const result = await login(email, password);
       console.log(result);
       if (result.success) {
-        // Always go to the default path for the user's role
+        // Always go to the default path for the user's role sds
         navigate(result.defaultPath, { replace: true });
       } else {
         setError(result.error || 'Failed to log in');
