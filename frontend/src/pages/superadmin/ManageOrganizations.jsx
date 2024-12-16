@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -26,48 +26,54 @@ import {
   InputAdornment,
   Tabs,
   Tab,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddBusinessIcon from '@mui/icons-material/AddBusiness';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 function ManageOrganizations() {
   const navigate = useNavigate();
   const { token, register } = useAuth(); // Destructure register from context
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState(null);
   const [organizations, setOrganizations] = useState([]); // Dynamic data
   const [plans, setPlans] = useState([]); // New state for plans
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch organizations
-        const orgResponse = await axios.get('http://localhost:5100/api/users/organizations', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const orgResponse = await axios.get(
+          "https://tensorgo-xzee.onrender.com/api/users/organizations",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setOrganizations(orgResponse.data);
 
         // Fetch plans
-        const plansResponse = await axios.get('http://localhost:5100/api/plans', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const plansResponse = await axios.get(
+          "https://tensorgo-xzee.onrender.com/api/plans",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setPlans(plansResponse.data);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load data');
+        console.error("Error fetching data:", err);
+        setError("Failed to load data");
       } finally {
         setLoading(false);
       }
@@ -88,15 +94,18 @@ function ManageOrganizations() {
 
   const handleDeleteOrg = async (orgId) => {
     try {
-      await axios.delete(`http://localhost:5100/api/users/${orgId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://tensorgo-xzee.onrender.com/api/users/${orgId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setOrganizations(organizations.filter((org) => org.id !== orgId));
     } catch (err) {
-      console.error('Error deleting organization:', err);
-      setError('Failed to delete organization');
+      console.error("Error deleting organization:", err);
+      setError("Failed to delete organization");
     }
   };
 
@@ -110,13 +119,13 @@ function ManageOrganizations() {
     // Collect data from form
     const formData = new FormData(event.target);
     const orgData = {
-      firstName: formData.get('firstName'),
-      lastName: formData.get('lastName'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      confirmPassword: formData.get('confirmPassword'),
-      planId: formData.get('planId'),
-      role: 'User', // Set role to 'User' for organizations
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
+      planId: formData.get("planId"),
+      role: "User", // Set role to 'User' for organizations
       // Add other necessary fields if required
     };
 
@@ -124,33 +133,38 @@ function ManageOrganizations() {
       const response = await register(orgData);
       if (response.success) {
         // Optionally, fetch the updated list of organizations
-        const fetchedOrganizations = await axios.get('http://localhost:5100/api/users/organizations', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const fetchedOrganizations = await axios.get(
+          "https://tensorgo-xzee.onrender.com/api/users/organizations",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setOrganizations(fetchedOrganizations.data);
         handleCloseDialog();
       } else {
         setError(response.error);
       }
     } catch (err) {
-      console.error('Error submitting organization:', err);
-      setError('Failed to submit organization');
+      console.error("Error submitting organization:", err);
+      setError("Failed to submit organization");
     }
   };
 
   const OrganizationDialog = ({ open, onClose, org }) => (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <form onSubmit={handleSubmit}>
-        <DialogTitle>{org ? 'Edit Organization' : 'Add New Organization'}</DialogTitle>
+        <DialogTitle>
+          {org ? "Edit Organization" : "Add New Organization"}
+        </DialogTitle>
         <DialogContent>
           <Grid container spacing={3} sx={{ mt: 1 }}>
             <Grid item xs={12} sm={6}>
               <TextField
                 name="firstName"
                 label="First Name"
-                defaultValue={org?.firstName || ''}
+                defaultValue={org?.firstName || ""}
                 fullWidth
                 required
               />
@@ -159,7 +173,7 @@ function ManageOrganizations() {
               <TextField
                 name="lastName"
                 label="Last Name"
-                defaultValue={org?.lastName || ''}
+                defaultValue={org?.lastName || ""}
                 fullWidth
                 required
               />
@@ -169,7 +183,7 @@ function ManageOrganizations() {
                 name="email"
                 label="Email Address"
                 type="email"
-                defaultValue={org?.email || ''}
+                defaultValue={org?.email || ""}
                 fullWidth
                 required
               />
@@ -199,7 +213,7 @@ function ManageOrganizations() {
                 <InputLabel>Plan</InputLabel>
                 <Select
                   name="planId"
-                  defaultValue={org?.planId || ''}
+                  defaultValue={org?.planId || ""}
                   label="Plan"
                 >
                   {/* Populate plans dynamically */}
@@ -222,7 +236,7 @@ function ManageOrganizations() {
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
           <Button type="submit" variant="contained">
-            {org ? 'Save Changes' : 'Add Organization'}
+            {org ? "Save Changes" : "Add Organization"}
           </Button>
         </DialogActions>
       </form>
@@ -232,9 +246,9 @@ function ManageOrganizations() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        width: '100vw',
-        background: 'linear-gradient(135deg, #2C3333 0%, #1A1F1F 100%)',
+        minHeight: "100vh",
+        width: "100vw",
+        background: "linear-gradient(135deg, #2C3333 0%, #1A1F1F 100%)",
         pt: { xs: 4, md: 8 },
         pb: { xs: 6, md: 12 },
       }}
@@ -245,7 +259,7 @@ function ManageOrganizations() {
           <Typography
             variant="h3"
             sx={{
-              color: 'white',
+              color: "white",
               fontWeight: 700,
               mb: 2,
             }}
@@ -255,7 +269,7 @@ function ManageOrganizations() {
           <Typography
             variant="h6"
             sx={{
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: "rgba(255, 255, 255, 0.7)",
               mb: 4,
             }}
           >
@@ -268,18 +282,18 @@ function ManageOrganizations() {
           elevation={3}
           sx={{
             borderRadius: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.98)',
-            border: '1px solid rgba(114, 47, 55, 0.2)',
+            backgroundColor: "rgba(255, 255, 255, 0.98)",
+            border: "1px solid rgba(114, 47, 55, 0.2)",
           }}
         >
           {/* Toolbar */}
           <Box
             sx={{
               p: 3,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
             }}
           >
             <TextField
@@ -302,7 +316,7 @@ function ManageOrganizations() {
               startIcon={<AddBusinessIcon />}
               onClick={handleAddOrg}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
                 fontWeight: 600,
               }}
             >
@@ -351,7 +365,7 @@ function ManageOrganizations() {
                   </TableRow>
                 ) : error ? (
                   <TableRow>
-                    <TableCell colSpan={8} sx={{ color: 'error.main' }}>
+                    <TableCell colSpan={8} sx={{ color: "error.main" }}>
                       {error}
                     </TableCell>
                   </TableRow>
@@ -381,7 +395,13 @@ function ManageOrganizations() {
                         <TableCell>
                           <Chip
                             label={org.status}
-                            color={org.status === 'Active' ? 'success' : org.status === 'Trial' ? 'info' : 'error'}
+                            color={
+                              org.status === "Active"
+                                ? "success"
+                                : org.status === "Trial"
+                                ? "info"
+                                : "error"
+                            }
                             size="small"
                           />
                         </TableCell>
@@ -389,11 +409,11 @@ function ManageOrganizations() {
                           <Chip
                             label={org.billingStatus}
                             color={
-                              org.billingStatus === 'Paid'
-                                ? 'success'
-                                : org.billingStatus === 'Trial'
-                                ? 'info'
-                                : 'error'
+                              org.billingStatus === "Paid"
+                                ? "success"
+                                : org.billingStatus === "Trial"
+                                ? "info"
+                                : "error"
                             }
                             size="small"
                           />

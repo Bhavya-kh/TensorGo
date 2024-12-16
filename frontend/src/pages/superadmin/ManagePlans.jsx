@@ -48,11 +48,14 @@ function ManagePlans() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get("http://localhost:5100/api/plans", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://tensorgo-xzee.onrender.com/api/plans",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         // console.log(response.data);
         setPlans(response.data);
       } catch (err) {
@@ -78,11 +81,14 @@ function ManagePlans() {
 
   const handleDeletePlan = async (planId) => {
     try {
-      await axios.delete(`http://localhost:5100/api/plans/${planId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://tensorgo-xzee.onrender.com/api/plans/${planId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setPlans(plans.filter((plan) => plan._id !== planId));
     } catch (err) {
       console.error("Error deleting plan:", err);
@@ -111,7 +117,7 @@ function ManagePlans() {
       if (selectedPlan) {
         // Update existing plan
         const response = await axios.put(
-          `http://localhost:5100/api/plans/${selectedPlan._id}`, // Use plan ID from URL
+          `https://tensorgo-xzee.onrender.com/api/plans/${selectedPlan._id}`, // Use plan ID from URL
           planData,
           {
             headers: {
@@ -127,7 +133,7 @@ function ManagePlans() {
       } else {
         // Create new plan
         const response = await axios.post(
-          "http://localhost:5100/api/plans",
+          "https://tensorgo-xzee.onrender.com/api/plans",
           planData,
           {
             headers: {
@@ -166,7 +172,6 @@ function ManagePlans() {
                 type="number"
                 defaultValue={plan?.price}
                 fullWidth
-               
                 required
                 InputProps={{
                   startAdornment: (
@@ -376,11 +381,7 @@ function ManagePlans() {
                       {/* <TableCell>{plan.storage}GB</TableCell> */}
                       <TableCell>{plan.totalEnrolled || 0}</TableCell>
                       <TableCell>
-                        <Chip
-                          label="Active"
-                          color="success"
-                          size="small"
-                        />
+                        <Chip label="Active" color="success" size="small" />
                       </TableCell>
                       <TableCell>
                         <IconButton

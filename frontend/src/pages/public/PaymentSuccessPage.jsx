@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -6,12 +6,12 @@ import {
   Button,
   CircularProgress,
   Snackbar,
-  Alert
-} from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+  Alert,
+} from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 function PaymentSuccessPage() {
   const navigate = useNavigate();
@@ -20,28 +20,31 @@ function PaymentSuccessPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
-  const planId = searchParams.get('planId');
-  const userId = searchParams.get('userId');
+  const planId = searchParams.get("planId");
+  const userId = searchParams.get("userId");
   // Assume planId is passed via location state
   // const planId = location.state?.planId;
 
   useEffect(() => {
     const updateUserPlan = async () => {
       if (!planId || !userId) {
-        setError('Invalid plan or user.');
+        setError("Invalid plan or user.");
         setLoading(false);
         return;
       }
 
       try {
-        await axios.put('http://localhost:5100/api/users/update-plan', {
-          userId: userId,
-          newPlanId: planId,
-        });
+        await axios.put(
+          "https://tensorgo-xzee.onrender.com/api/users/update-plan",
+          {
+            userId: userId,
+            newPlanId: planId,
+          }
+        );
 
         setLoading(false);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to update plan.');
+        setError(err.response?.data?.message || "Failed to update plan.");
         setLoading(false);
       }
     };
@@ -54,18 +57,20 @@ function PaymentSuccessPage() {
   };
 
   const handleGoHome = () => {
-    navigate('/dashboard'); // Adjust the path as needed
+    navigate("/dashboard"); // Adjust the path as needed
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      bgcolor: 'background.default'
-    }}>
-      <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        bgcolor: "background.default",
+      }}
+    >
+      <Container maxWidth="sm" sx={{ textAlign: "center" }}>
         {loading ? (
           <>
             <CircularProgress />
@@ -96,16 +101,16 @@ function PaymentSuccessPage() {
           </>
         )}
 
-        <Snackbar 
-          open={!!error} 
-          autoHideDuration={6000} 
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
           onClose={handleCloseError}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert 
-            onClose={handleCloseError} 
-            severity="error" 
-            sx={{ width: '100%' }}
+          <Alert
+            onClose={handleCloseError}
+            severity="error"
+            sx={{ width: "100%" }}
           >
             {error}
           </Alert>

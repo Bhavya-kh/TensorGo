@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -20,16 +20,16 @@ import {
   Stack,
   Container,
   CircularProgress,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Check as CheckIcon,
   ArrowBack as ArrowBackIcon,
   Person as PersonIcon,
   ExitToApp as LogoutIcon,
-} from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation if not already imported
-import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+} from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation if not already imported
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 function BrowsePlansPage() {
   const navigate = useNavigate();
@@ -42,26 +42,28 @@ function BrowsePlansPage() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get('http://localhost:5100/api/plans'); // Adjust the API endpoint as needed
-        const fetchedPlans = response.data.map(plan => ({
+        const response = await axios.get(
+          "https://tensorgo-xzee.onrender.com/api/plans"
+        ); // Adjust the API endpoint as needed
+        const fetchedPlans = response.data.map((plan) => ({
           _id: plan._id, // Include plan ID for comparison
           name: plan.name,
           price: `INR ${plan.price}`,
-          period: 'Per Year, Per User',
+          period: "Per Year, Per User",
           features: [
             `Limited to ${plan.userLimit} users`,
-            plan.description || 'Basic features access',
+            plan.description || "Basic features access",
             `Valid for ${plan.daysValidity} days`,
-            'Email support'
+            "Email support",
           ],
           buttonText: `Choose ${plan.name}`,
           recommended: false, // You can add logic to mark recommended plans if needed
-          totalEnrolled: plan.totalEnrolled || 0
+          totalEnrolled: plan.totalEnrolled || 0,
         }));
         setPlans(fetchedPlans);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch plans');
+        setError("Failed to fetch plans");
         setLoading(false);
       }
     };
@@ -79,29 +81,33 @@ function BrowsePlansPage() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleBack = () => {
     navigate(-1); // Go back to previous page
   };
 
-  const handleSelectPlan = (planId) => { // Change parameter to planId
-    navigate('/cart', { state: { planId } }); // Navigate with planId
+  const handleSelectPlan = (planId) => {
+    // Change parameter to planId
+    navigate("/cart", { state: { planId } }); // Navigate with planId
   };
 
-  const dashboardPath = user?.role === 'User' ? '/admin/dashboard' 
-                      : user?.role === 'Admin' ? '/superadmin/dashboard'
-                      : '/user/dashboard';
+  const dashboardPath =
+    user?.role === "User"
+      ? "/admin/dashboard"
+      : user?.role === "Admin"
+      ? "/superadmin/dashboard"
+      : "/user/dashboard";
 
   if (loading) {
     return (
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh' 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
         }}
       >
         <CircularProgress />
@@ -111,12 +117,12 @@ function BrowsePlansPage() {
 
   if (error) {
     return (
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh' 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
         }}
       >
         <Typography color="error">{error}</Typography>
@@ -125,14 +131,20 @@ function BrowsePlansPage() {
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      width: '100vw',
-      bgcolor: 'background.default',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <AppBar position="fixed" sx={{ bgcolor: 'background.paper', color: 'text.primary' }} elevation={1}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100vw",
+        bgcolor: "background.default",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <AppBar
+        position="fixed"
+        sx={{ bgcolor: "background.paper", color: "text.primary" }}
+        elevation={1}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -142,8 +154,12 @@ function BrowsePlansPage() {
           >
             <ArrowBackIcon />
           </IconButton>
-          
-          <Typography variant="h6" component="div" sx={{ fontWeight: 600, color: 'primary.main', flexGrow: 0, mr: 4 }}>
+
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ fontWeight: 600, color: "primary.main", flexGrow: 0, mr: 4 }}
+          >
             Plans & Pricing
           </Typography>
 
@@ -154,9 +170,9 @@ function BrowsePlansPage() {
               color="inherit"
               onClick={() => navigate(dashboardPath)}
               sx={{
-                textTransform: 'none',
-                '&:hover': {
-                  backgroundColor: 'rgba(114, 47, 55, 0.08)',
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "rgba(114, 47, 55, 0.08)",
                 },
               }}
             >
@@ -164,12 +180,9 @@ function BrowsePlansPage() {
             </Button>
           </Stack>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, ml: 2 }}>
-            <IconButton
-              onClick={handleProfileMenuOpen}
-              size="small"
-            >
-              <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, ml: 2 }}>
+            <IconButton onClick={handleProfileMenuOpen} size="small">
+              <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.main" }}>
                 <PersonIcon />
               </Avatar>
             </IconButton>
@@ -177,13 +190,21 @@ function BrowsePlansPage() {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', pt: 12, pb: 8 }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          pt: 12,
+          pb: 8,
+        }}
+      >
         <Container maxWidth={false} sx={{ px: { xs: 4, md: 8 } }}>
           <Typography
             variant="h3"
             align="center"
             gutterBottom
-            sx={{ fontWeight: 700, color: 'text.primary', mb: 6 }}
+            sx={{ fontWeight: 700, color: "text.primary", mb: 6 }}
           >
             Choose Your Plan
           </Typography>
@@ -196,32 +217,32 @@ function BrowsePlansPage() {
                   <Card
                     elevation={plan.recommended ? 8 : 2}
                     sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      position: 'relative',
-                      transition: 'transform 0.2s',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      position: "relative",
+                      transition: "transform 0.2s",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
                       },
                       ...(plan.recommended && {
                         border: 2,
-                        borderColor: 'primary.main',
+                        borderColor: "primary.main",
                       }),
                     }}
                   >
                     {plan.recommended && (
                       <Box
                         sx={{
-                          position: 'absolute',
+                          position: "absolute",
                           top: 12,
                           right: 12,
-                          bgcolor: 'primary.main',
-                          color: 'white',
+                          bgcolor: "primary.main",
+                          color: "white",
                           px: 2,
                           py: 0.5,
                           borderRadius: 1,
-                          fontSize: '0.875rem',
+                          fontSize: "0.875rem",
                           fontWeight: 500,
                         }}
                       >
@@ -231,15 +252,15 @@ function BrowsePlansPage() {
                     {isCurrentPlan && (
                       <Box
                         sx={{
-                          position: 'absolute',
+                          position: "absolute",
                           top: 12,
                           left: 12,
-                          bgcolor: 'secondary.main',
-                          color: 'white',
+                          bgcolor: "secondary.main",
+                          color: "white",
                           px: 2,
                           py: 0.5,
                           borderRadius: 1,
-                          fontSize: '0.875rem',
+                          fontSize: "0.875rem",
                           fontWeight: 500,
                         }}
                       >
@@ -247,14 +268,29 @@ function BrowsePlansPage() {
                       </Box>
                     )}
                     <CardContent sx={{ flexGrow: 1, p: 4 }}>
-                      <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600 }}>
+                      <Typography
+                        variant="h4"
+                        component="h2"
+                        gutterBottom
+                        sx={{ fontWeight: 600 }}
+                      >
                         {plan.name}
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 4 }}>
-                        <Typography variant="h3" component="span" sx={{ fontWeight: 700 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "baseline", mb: 4 }}
+                      >
+                        <Typography
+                          variant="h3"
+                          component="span"
+                          sx={{ fontWeight: 700 }}
+                        >
                           {plan.price}
                         </Typography>
-                        <Typography variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          sx={{ ml: 1 }}
+                        >
                           {plan.period}
                         </Typography>
                       </Box>
@@ -272,17 +308,17 @@ function BrowsePlansPage() {
                     <CardActions sx={{ p: 4, pt: 0 }}>
                       <Button
                         fullWidth
-                        variant={plan.recommended ? 'contained' : 'outlined'}
+                        variant={plan.recommended ? "contained" : "outlined"}
                         size="large"
                         onClick={() => handleSelectPlan(plan._id)} // Pass plan._id
                         disabled={isCurrentPlan} // Disable button if it's the current plan
                         sx={{
                           py: 1.5,
-                          textTransform: 'none',
+                          textTransform: "none",
                           fontWeight: 600,
                         }}
                       >
-                        {isCurrentPlan ? 'Current Plan' : plan.buttonText}
+                        {isCurrentPlan ? "Current Plan" : plan.buttonText}
                       </Button>
                     </CardActions>
                   </Card>

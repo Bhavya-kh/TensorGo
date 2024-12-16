@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -22,18 +22,18 @@ import {
   ListItemIcon,
   Stack,
   Snackbar,
-  Alert
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 import {
   Delete as DeleteIcon,
   ArrowBack as ArrowBackIcon,
   Person as PersonIcon,
   ExitToApp as LogoutIcon,
   ShoppingCart as CartIcon,
-} from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+} from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 function CartPage() {
   const navigate = useNavigate();
@@ -49,7 +49,9 @@ function CartPage() {
     const fetchCart = async () => {
       if (!planId) return;
       try {
-        const response = await axios.get(`http://localhost:5100/api/plans/${planId}`); // Fetch plan details
+        const response = await axios.get(
+          `https://tensorgo-xzee.onrender.com/api/plans/${planId}`
+        ); // Fetch plan details
         // console.log(response.data);
         const plan = response.data;
         setCartItems([
@@ -64,7 +66,7 @@ function CartPage() {
           },
         ]);
       } catch (err) {
-        setError('Failed to fetch plan details');
+        setError("Failed to fetch plan details");
       }
     };
 
@@ -81,7 +83,7 @@ function CartPage() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleBack = () => {
@@ -89,29 +91,34 @@ function CartPage() {
   };
 
   const handleRemoveItem = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter(item => item.id !== itemId));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      setError('Your cart is empty.');
+      setError("Your cart is empty.");
       return;
     }
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://localhost:5100/api/payments', {
-        planId: cartItems[0].planId, // Assuming single item for simplicity
-        // userCount: cartItems[0].quantity,
-        email: user.email,
-        userId: user._id,
-      });
+      const response = await axios.post(
+        "https://tensorgo-xzee.onrender.com/api/payments",
+        {
+          planId: cartItems[0].planId, // Assuming single item for simplicity
+          // userCount: cartItems[0].quantity,
+          email: user.email,
+          userId: user._id,
+        }
+      );
 
       if (response.data.url) {
         window.location.href = response.data.url;
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during checkout');
+      setError(
+        err.response?.data?.message || "An error occurred during checkout"
+      );
       setIsLoading(false);
     }
   };
@@ -120,19 +127,28 @@ function CartPage() {
     setError(null);
   };
 
-  const dashboardPath = user?.role === 'admin' ? '/admin/dashboard' 
-                     : user?.role === 'superadmin' ? '/superadmin/dashboard'
-                     : '/user/dashboard';
+  const dashboardPath =
+    user?.role === "admin"
+      ? "/admin/dashboard"
+      : user?.role === "superadmin"
+      ? "/superadmin/dashboard"
+      : "/user/dashboard";
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
-      width: '100vw',
-      bgcolor: 'background.default',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <AppBar position="fixed" sx={{ bgcolor: 'background.paper', color: 'text.primary' }} elevation={1}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100vw",
+        bgcolor: "background.default",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <AppBar
+        position="fixed"
+        sx={{ bgcolor: "background.paper", color: "text.primary" }}
+        elevation={1}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -142,8 +158,12 @@ function CartPage() {
           >
             <ArrowBackIcon />
           </IconButton>
-          
-          <Typography variant="h6" component="div" sx={{ fontWeight: 600, color: 'primary.main', flexGrow: 0, mr: 4 }}>
+
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ fontWeight: 600, color: "primary.main", flexGrow: 0, mr: 4 }}
+          >
             Shopping Cart
           </Typography>
 
@@ -154,9 +174,9 @@ function CartPage() {
               color="inherit"
               onClick={() => navigate(dashboardPath)}
               sx={{
-                textTransform: 'none',
-                '&:hover': {
-                  backgroundColor: 'rgba(114, 47, 55, 0.08)',
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "rgba(114, 47, 55, 0.08)",
                 },
               }}
             >
@@ -164,12 +184,9 @@ function CartPage() {
             </Button>
           </Stack>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, ml: 2 }}>
-            <IconButton
-              onClick={handleProfileMenuOpen}
-              size="small"
-            >
-              <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, ml: 2 }}>
+            <IconButton onClick={handleProfileMenuOpen} size="small">
+              <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.main" }}>
                 <PersonIcon />
               </Avatar>
             </IconButton>
@@ -177,61 +194,94 @@ function CartPage() {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', pt: 12, pb: 8 }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          pt: 12,
+          pb: 8,
+        }}
+      >
         <Container maxWidth="lg">
           {cartItems.length > 0 ? (
             <Grid container spacing={4}>
               {/* Cart Items */}
               <Grid item xs={12} md={8}>
                 <Paper sx={{ p: 3, mb: { xs: 3, md: 0 } }}>
-                  <Typography variant="h6" sx={{ mb: 3 }}>Cart Items</Typography>
+                  <Typography variant="h6" sx={{ mb: 3 }}>
+                    Cart Items
+                  </Typography>
                   <List>
                     {cartItems.map((item) => (
                       <React.Fragment key={item.id}>
                         <ListItem alignItems="flex-start" sx={{ py: 3 }}>
                           <ListItemText
                             primary={
-                              <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+                              <Typography
+                                variant="h6"
+                                component="div"
+                                sx={{ mb: 1 }}
+                              >
                                 {item.name}
                               </Typography>
                             }
                             secondary={
                               <Box>
-                                <Typography variant="body2" color="text.secondary" paragraph>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  paragraph
+                                >
                                   {item.period}
                                 </Typography>
                                 {/* Display features if available */}
                                 {item.features && (
                                   <List dense>
-                                    {item.features.split(',').map((feature, index) => (
-                                      <ListItem key={index} sx={{ px: 0 }}>
-                                        <ListItemText 
-                                          primary={feature.trim()}
-                                          primaryTypographyProps={{
-                                            variant: 'body2',
-                                            color: 'text.secondary'
-                                          }}
-                                        />
-                                      </ListItem>
-                                    ))}
+                                    {item.features
+                                      .split(",")
+                                      .map((feature, index) => (
+                                        <ListItem key={index} sx={{ px: 0 }}>
+                                          <ListItemText
+                                            primary={feature.trim()}
+                                            primaryTypographyProps={{
+                                              variant: "body2",
+                                              color: "text.secondary",
+                                            }}
+                                          />
+                                        </ListItem>
+                                      ))}
                                   </List>
                                 )}
                               </Box>
                             }
                           />
                           <ListItemSecondaryAction>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                                gap: 1,
+                              }}
+                            >
                               <Typography variant="h6" color="primary">
                                 {`INR ${item.price * item.quantity}`}
                               </Typography>
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}
+                              >
                                 <Typography variant="body2">
                                   Quantity: {item.quantity}
                                 </Typography>
-                                <IconButton 
-                                  edge="end" 
+                                <IconButton
+                                  edge="end"
                                   onClick={() => handleRemoveItem(item.id)}
-                                  sx={{ color: 'error.main' }}
+                                  sx={{ color: "error.main" }}
                                 >
                                   <DeleteIcon />
                                 </IconButton>
@@ -257,26 +307,35 @@ function CartPage() {
                       <ListItem sx={{ px: 0 }}>
                         <ListItemText primary="Subtotal" />
                         <Typography variant="body1">
-                          {`INR ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)}`}
+                          {`INR ${cartItems.reduce(
+                            (acc, item) => acc + item.price * item.quantity,
+                            0
+                          )}`}
                         </Typography>
                       </ListItem>
                       <ListItem sx={{ px: 0 }}>
                         <ListItemText primary="Tax (18%)" />
                         <Typography variant="body1">
-                          {`INR ${Math.round(cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) * 0.18)}`}
+                          {`INR ${Math.round(
+                            cartItems.reduce(
+                              (acc, item) => acc + item.price * item.quantity,
+                              0
+                            ) * 0.18
+                          )}`}
                         </Typography>
                       </ListItem>
                       <Divider sx={{ my: 2 }} />
                       <ListItem sx={{ px: 0 }}>
-                        <ListItemText 
-                          primary={
-                            <Typography variant="h6">
-                              Total
-                            </Typography>
-                          }
+                        <ListItemText
+                          primary={<Typography variant="h6">Total</Typography>}
                         />
                         <Typography variant="h6" color="primary">
-                          {`INR ${Math.round(cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) * 1.18)}`}
+                          {`INR ${Math.round(
+                            cartItems.reduce(
+                              (acc, item) => acc + item.price * item.quantity,
+                              0
+                            ) * 1.18
+                          )}`}
                         </Typography>
                       </ListItem>
                     </List>
@@ -288,25 +347,22 @@ function CartPage() {
                       disabled={isLoading}
                       sx={{ mt: 2 }}
                     >
-                      {isLoading ? 'Processing...' : 'Proceed to Checkout'}
+                      {isLoading ? "Processing..." : "Proceed to Checkout"}
                     </Button>
                   </CardContent>
                 </Card>
               </Grid>
             </Grid>
           ) : (
-            <Paper sx={{ p: 6, textAlign: 'center' }}>
-              <CartIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
+            <Paper sx={{ p: 6, textAlign: "center" }}>
+              <CartIcon sx={{ fontSize: 60, color: "text.secondary", mb: 2 }} />
               <Typography variant="h5" gutterBottom>
                 Your cart is empty
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
                 Add some plans to your cart to proceed with the purchase.
               </Typography>
-              <Button
-                variant="contained"
-                onClick={() => navigate('/plans')}
-              >
+              <Button variant="contained" onClick={() => navigate("/plans")}>
                 Browse Plans
               </Button>
             </Paper>
@@ -314,16 +370,16 @@ function CartPage() {
         </Container>
       </Box>
 
-      <Snackbar 
-        open={!!error} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
         onClose={handleCloseError}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleCloseError} 
-          severity="error" 
-          sx={{ width: '100%' }}
+        <Alert
+          onClose={handleCloseError}
+          severity="error"
+          sx={{ width: "100%" }}
         >
           {error}
         </Alert>

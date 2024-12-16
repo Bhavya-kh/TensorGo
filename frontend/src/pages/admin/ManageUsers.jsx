@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
   Container,
@@ -24,19 +24,19 @@ import {
   MenuItem,
   InputAdornment,
   Grid,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for API calls
-import { useAuth } from '../../contexts/AuthContext'; // Use useAuth instead of AuthContext
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API calls
+import { useAuth } from "../../contexts/AuthContext"; // Use useAuth instead of AuthContext
 
 function ManageUsers() {
   const navigate = useNavigate();
   const { user: currentUser } = useAuth(); // Use useAuth to get currentUser
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -47,16 +47,19 @@ function ManageUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5100/api/users/otherUsers?userId=${currentUser._id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `https://tensorgo-xzee.onrender.com/api/users/otherUsers?userId=${currentUser._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setUsers(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch users.');
+        setError("Failed to fetch users.");
         setLoading(false);
       }
     };
@@ -77,7 +80,7 @@ function ManageUsers() {
 
   const handleDeleteUser = (userId) => {
     // Handle user deletion
-    console.log('Delete user:', userId);
+    console.log("Delete user:", userId);
   };
 
   const handleCloseDialog = () => {
@@ -90,10 +93,10 @@ function ManageUsers() {
     event.preventDefault();
     const formData = new FormData(event.target);
     const userData = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      role: 'User', // Always set to User
+      name: formData.get("name"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      role: "User", // Always set to User
       subscriptionAdmin: false, // Always false for created users
       referenceUserId: currentUser._id, // Include reference user ID
       plan: currentUser.plan,
@@ -101,32 +104,37 @@ function ManageUsers() {
     };
 
     try {
-      const token = localStorage.getItem('token');
-       const responseForCreate = await axios.post('http://localhost:5100/api/users/', userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = localStorage.getItem("token");
+      const responseForCreate = await axios.post(
+        "https://tensorgo-xzee.onrender.com/api/users/",
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       handleCloseDialog();
       // Refresh users list
-      const response = await axios.get(`http://localhost:5100/api/users/otherUsers?userId=${currentUser._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `https://tensorgo-xzee.onrender.com/api/users/otherUsers?userId=${currentUser._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(response.data);
       setUsers(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create user.');
+      setError(err.response?.data?.message || "Failed to create user.");
     }
   };
 
   const UserDialog = ({ open, onClose, user }) => (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <form onSubmit={handleSubmitUser}>
-        <DialogTitle>
-          {user ? 'Edit User' : 'Add New User'}
-        </DialogTitle>
+        <DialogTitle>{user ? "Edit User" : "Add New User"}</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid item xs={12}>
@@ -164,7 +172,7 @@ function ManageUsers() {
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
           <Button type="submit" variant="contained">
-            {user ? 'Save Changes' : 'Add User'}
+            {user ? "Save Changes" : "Add User"}
           </Button>
         </DialogActions>
       </form>
@@ -174,9 +182,9 @@ function ManageUsers() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        width: '100vw',
-        background: 'linear-gradient(135deg, #2C3333 0%, #1A1F1F 100%)',
+        minHeight: "100vh",
+        width: "100vw",
+        background: "linear-gradient(135deg, #2C3333 0%, #1A1F1F 100%)",
         pt: { xs: 4, md: 8 },
         pb: { xs: 6, md: 12 },
       }}
@@ -187,7 +195,7 @@ function ManageUsers() {
           <Typography
             variant="h3"
             sx={{
-              color: 'white',
+              color: "white",
               fontWeight: 700,
               mb: 2,
             }}
@@ -197,7 +205,7 @@ function ManageUsers() {
           <Typography
             variant="h6"
             sx={{
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: "rgba(255, 255, 255, 0.7)",
               mb: 4,
             }}
           >
@@ -210,18 +218,18 @@ function ManageUsers() {
           elevation={3}
           sx={{
             borderRadius: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.98)',
-            border: '1px solid rgba(114, 47, 55, 0.2)',
+            backgroundColor: "rgba(255, 255, 255, 0.98)",
+            border: "1px solid rgba(114, 47, 55, 0.2)",
           }}
         >
           {/* Toolbar */}
           <Box
             sx={{
               p: 3,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
             }}
           >
             <TextField
@@ -244,7 +252,7 @@ function ManageUsers() {
               startIcon={<GroupAddIcon />}
               onClick={handleAddUser}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
                 fontWeight: 600,
               }}
             >
@@ -282,8 +290,12 @@ function ManageUsers() {
                   users
                     .filter(
                       (user) =>
-                        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+                        user.name
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()) ||
+                        user.email
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase())
                     )
                     .map((user) => (
                       <TableRow key={user._id} hover>
@@ -291,31 +303,29 @@ function ManageUsers() {
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
                           <Chip
-                            label= {user.subscriptionAdmin ? 'Admin' : 'User'}
-                            color={user.subscriptionAdmin ? 'primary' : 'default'}
+                            label={user.subscriptionAdmin ? "Admin" : "User"}
+                            color={
+                              user.subscriptionAdmin ? "primary" : "default"
+                            }
                             size="small"
                           />
                         </TableCell>
                         <TableCell>
-                          <Chip
-                            label="Active"
-                            color='sucess'
-                            size="small"
-                          />
+                          <Chip label="Active" color="sucess" size="small" />
                         </TableCell>
-                        
+
                         <TableCell>
                           <IconButton
                             size="small"
                             onClick={() => handleEditUser(user)}
-                            sx={{ color: 'primary.main' }}
+                            sx={{ color: "primary.main" }}
                           >
                             <EditIcon />
                           </IconButton>
                           <IconButton
                             size="small"
                             onClick={() => handleDeleteUser(user._id)}
-                            sx={{ color: 'error.main' }}
+                            sx={{ color: "error.main" }}
                           >
                             <DeleteIcon />
                           </IconButton>
