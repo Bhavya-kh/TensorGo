@@ -45,7 +45,7 @@ function LoginPage() {
         position: 'fixed',
         top: 0,
         left: 0,
-        backgroundImage: 'url(https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&w=1920)',
+        backgroundImage: 'url(https://plus.unsplash.com/premium_photo-1661503228332-03778ab6d6a1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWVldGluZ3xlbnwwfHwwfHx8MA%3D%3D)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
