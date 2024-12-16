@@ -1,0 +1,62 @@
+{
+    "version": 2,
+    "routes": [
+      { "src": "/api/(.*)", "dest": "/api/$1" },
+      { "src": "/(.*)", "dest": "/index.html" }
+    ],
+    "rewrites": [
+      {
+        "source": "/plans",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/cart",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/checkout",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/payment/success",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/payment/failure",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/user/dashboard",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/user/orders",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/admin/dashboard",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/admin/manage-users",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/superadmin/dashboard",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/superadmin/manage-plans",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/superadmin/manage-organizations",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ]
+  }
+  
